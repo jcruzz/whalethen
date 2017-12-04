@@ -6,17 +6,25 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const api = require('./placesApi.js');
 const db = require('../database/');
-const config = require('../webpack.config.js');
+
+// UNCOMMENT FOR PRODUCTION
+const config = require('../webpack.config.prod.js');
+
+// UNCOMMENT FOR DEVELOPMENT
+// const config = require('../webpack.config.dev.js');
 require('dotenv').config();
 
 const app = express();
 const compiler = webpack(config);
 
-app.use(webpackDevMiddleware(compiler, {
-  noInfo: true,
-  publicPath: config.output.publicPath,
-}));
-app.use(webpackHotMiddleware(compiler));
+if (process.env.NODE_ENV !== 'production') {
+  app.use(webpackDevMiddleware(compiler, {
+    noInfo: true,
+    publicPath: config.output.publicPath,
+  }));
+  app.use(webpackHotMiddleware(compiler));
+}
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

@@ -17,9 +17,12 @@ class TimelineComp extends React.Component {
 
     } = this.props;
     // this.props.router.push(this.props.match.params.id)
-    getTrip(this.props.match.params.id);
+    
   }
 
+  componentDidMount() {
+    this.props.getTrip(this.props.match.params.id);
+  }
   render() {
     return (
       <div className="App">
